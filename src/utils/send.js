@@ -2,9 +2,8 @@
 
 const https = require('https');
 
+// `data` is a JSON-stringified object.
 function send(data, requestConfigs) {
-  const data = JSON.stringify(data);
-
   const req = https.request(requestConfigs, (response) => {
     let responseData = '';
     response.on('data', () => responseData += chunk);
