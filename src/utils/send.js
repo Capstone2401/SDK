@@ -15,4 +15,21 @@ function send(data, requestConfigs) {
   req.end();
 }
 
-module.exports = send;
+function makeConfigs(endpoint, dataLength) {
+  const requestConfigs = {
+    host: endpoint,
+    method: 'POST',
+    protocol: 'https',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': dataLength,
+    },
+  };
+
+  return requestConfigs
+}
+
+module.exports = {
+  send,
+  makeConfigs,
+};
