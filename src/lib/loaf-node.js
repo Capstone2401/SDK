@@ -1,6 +1,6 @@
 "use strict";
 
-const { send: httpsSend, makeConfigs } = require('../utils/send');
+const { httpsSend, makeConfigs } = require('../utils/send');
 const { attributes } = require('../utils/handleAttributes');
 
 const DEFAULT_CONFIG = {
@@ -36,16 +36,16 @@ function makeProfile(endpoint, userId, userAttributes) {
 
 function updateProfile() {}
 
-function init(gateway, developerConfig) {
+function init(gatewayUrl, developerConfig) {
   // TODO; error handling for if `gateway` is missing. `gateway` is required.
 
   const loafInstance = {
-    endpoint: gateway,
+    gatewayUrl,
     config: { ...DEFAULT_CONFIG },
   };
 
-  loafInstance.sendEvent = sendEvent.bind(null, `${loafInstance.endpoint}/events`);
-  loafInstance.makeProfile = makeProfile.bind(null, `${loafInstance.endpoint}/users`);
+  loafInstance.sendEvent = sendEvent.bind(null, `${gatewayUrl}/events`);
+  loafInstance.makeProfile = makeProfile.bind(null, `${gatewayUrl}/users`);
   loafInstance.updateProfile = updateProfile;
   return loafInstance;
 }

@@ -3,7 +3,7 @@
 const https = require('https');
 
 // `data` is a JSON-stringified object.
-function send(data, requestConfigs) {
+function httpsSend(data, requestConfigs) {
   const req = https.request(requestConfigs, (response) => {
     let responseData = '';
     response.on('data', () => responseData += chunk);
@@ -30,6 +30,6 @@ function makeConfigs(endpoint, dataLength) {
 }
 
 module.exports = {
-  send,
+  httpsSend,
   makeConfigs,
 };
