@@ -1,25 +1,24 @@
 "use strict";
 
+const { URL } = require('url');
 const { httpsSend, makeConfigs } = require('../utils/send');
-const { attributes } = require('../utils/handleAttributes');
 
 const DEFAULT_CONFIG = {
   test: false,
   debug: false,
 };
 
-function sendEvent(endpoint, eventName, userId, eventAttributes) {
+function sendEvent(host, path, eventName, userId, eventAttributes) {
   // TODO; error handling for if `eventName` is missing. `eventName` is required.
   // TODO; DISCUSS - should userId be required? We can lump unassociated events under a 'default user'
 
   const eventData = JSON.stringify({
     event_name: eventName,
     user_id: userId,
-    event_attributes: attributes.bundle(eventAttributes),
-    // ...attributes.defaultEventAttrs(), TODO; default event attributes TBD
+    event_attributes: { ...eventAttributes }
   });
 
-  httpsSend(eventData, makeConfigs(endpoint, eventData.length));
+  httpsSend(eventData, makeConfigs(host, path, "POST", eventData.length));
 }
 
 function makeProfile(endpoint, userId, userAttributes) {
@@ -27,8 +26,7 @@ function makeProfile(endpoint, userId, userAttributes) {
 
   const userData = JSON.stringify({
     user_id: userId,
-    user_attributes: attributes.bundle(userAttributes),
-    // ...attributes.defaultUserAttrs(), TODO; default user attributes TBD
+    user_attributes: { ...userAttributes },
   });
 
   httpsSend(userData, makeConfigs(endpoint, userData.length));
@@ -39,12 +37,15 @@ function updateProfile() {}
 function init(gatewayUrl, developerConfig) {
   // TODO; error handling for if `gateway` is missing. `gateway` is required.
 
+  const url = new URL(gatewayUrl);
+  const host = url.hostname;
+  const path = url.pathname;
+
   const loafInstance = {
-    gatewayUrl,
     config: { ...DEFAULT_CONFIG },
   };
 
-  loafInstance.sendEvent = sendEvent.bind(null, `${gatewayUrl}/events`);
+  loafInstance.sendEvent = sendEvent.bind(null, host, `${path}/events`);
   loafInstance.makeProfile = makeProfile.bind(null, `${gatewayUrl}/users`);
   loafInstance.updateProfile = updateProfile;
   return loafInstance;

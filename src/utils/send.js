@@ -6,7 +6,7 @@ const https = require('https');
 function httpsSend(data, requestConfigs) {
   const req = https.request(requestConfigs, (response) => {
     let responseData = '';
-    response.on('data', () => responseData += chunk);
+    response.on('data', (chunk) => responseData += chunk);
     response.on('end', () => console.log('Response body: ', responseData));
   });
 
@@ -15,11 +15,11 @@ function httpsSend(data, requestConfigs) {
   req.end();
 }
 
-function makeConfigs(endpoint, dataLength) {
+function makeConfigs(host, path, method, dataLength) {
   const requestConfigs = {
-    host: endpoint,
-    method: 'POST',
-    protocol: 'https',
+    host, 
+    path,
+    method,
     headers: {
       'Content-Type': 'application/json',
       'Content-Length': dataLength,
