@@ -21,7 +21,7 @@ function sendEvent(host, path, eventName, userId, eventAttributes) {
   httpsSend(eventData, makeConfigs(host, path, "POST", eventData.length));
 }
 
-function makeUser(endpoint, userId, userAttributes) {
+function makeUser(host, path, userId, userAttributes) {
   // TODO; error handling for if `userId` is missing. `userId` is required.
 
   const userData = JSON.stringify({
@@ -29,7 +29,7 @@ function makeUser(endpoint, userId, userAttributes) {
     user_attributes: { ...userAttributes },
   });
 
-  httpsSend(userData, makeConfigs(endpoint, userData.length));
+  httpsSend(userData, makeConfigs(host, path, "POST", userData.length));
 }
 
 function updateUser(host, path, userId, userAttributes) {
