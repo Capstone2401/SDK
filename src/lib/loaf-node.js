@@ -21,7 +21,7 @@ function sendEvent(host, path, eventName, userId, eventAttributes) {
   httpsSend(eventData, makeConfigs(host, path, "POST", eventData.length));
 }
 
-function makeProfile(endpoint, userId, userAttributes) {
+function makeUser(endpoint, userId, userAttributes) {
   // TODO; error handling for if `userId` is missing. `userId` is required.
 
   const userData = JSON.stringify({
@@ -32,7 +32,7 @@ function makeProfile(endpoint, userId, userAttributes) {
   httpsSend(userData, makeConfigs(endpoint, userData.length));
 }
 
-function updateProfile(host, path, userId, userAttributes) {
+function updateUser(host, path, userId, userAttributes) {
   // TODO; error handling for if `userId` is missing. `userId` is required.
 
   const userData = JSON.stringify({
@@ -55,8 +55,8 @@ function init(gatewayUrl, developerConfig) {
   };
 
   loafInstance.sendEvent = sendEvent.bind(null, host, `${path}/events`);
-  loafInstance.makeProfile = makeProfile.bind(null, host, `${path}/users`);
-  loafInstance.updateProfile = updateProfile.bind(null, host, `${path}/update-user`);
+  loafInstance.makeUser = makeUser.bind(null, host, `${path}/users`);
+  loafInstance.updateUser = updateUser.bind(null, host, `${path}/update-user`);
   return loafInstance;
 }
 
