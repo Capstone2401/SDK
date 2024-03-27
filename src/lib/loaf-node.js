@@ -32,7 +32,16 @@ function makeProfile(endpoint, userId, userAttributes) {
   httpsSend(userData, makeConfigs(endpoint, userData.length));
 }
 
-function updateProfile() {}
+function updateProfile(host, path, userId, userAttributes) {
+  // TODO; error handling for if `userId` is missing. `userId` is required.
+
+  const userData = JSON.stringify({
+    user_id: userId,
+    user_attributes: { ...userAttributes },
+  });
+
+  httpsSend(userData, makeConfigs(host, path, "PATCH", userData.length));
+}
 
 function init(gatewayUrl, developerConfig) {
   // TODO; error handling for if `gateway` is missing. `gateway` is required.
@@ -46,8 +55,8 @@ function init(gatewayUrl, developerConfig) {
   };
 
   loafInstance.sendEvent = sendEvent.bind(null, host, `${path}/events`);
-  loafInstance.makeProfile = makeProfile.bind(null, `${gatewayUrl}/users`);
-  loafInstance.updateProfile = updateProfile;
+  loafInstance.makeProfile = makeProfile.bind(null, host, `${path}/users`);
+  loafInstance.updateProfile = updateProfile.bind(null, host, `${path}/update-user`);
   return loafInstance;
 }
 
