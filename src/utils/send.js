@@ -1,32 +1,42 @@
 "use strict";
 
-const https = require('https');
+const axios = require("axios");
+const processEvent = require("./process-event");
+const processUser = require("./process-user");
 
-// `data` is a JSON-stringified object.
-function httpsSend(data, requestConfigs) {
-  const req = https.request(requestConfigs, (response) => {
-    let responseData = '';
-    response.on('data', (chunk) => responseData += chunk);
-    response.on('end', () => console.log('Response body: ', responseData));
-  });
+async function httpsSend(category, data, requestConfigs) {
+  try {
+    let formatted;
+    if (category === "event") {
+      formatted = processEvent(data);
+    } else if (category === "user") {
+      formatted = processUser(data);
+    } else {
+      throw new Error("Invalid category specified");
+    }
 
-  req.on('error', (err) => console.error('Error: ', err));
-  req.write(data);
-  req.end();
+    // TODO
+    // Currently, we are sending data that only kinesis can parse
+    // Lambda requires different format
+    const response = await post(
+      `https://${requestConfigs.host}${requestConfigs.path}`,
+      formatted,
+    );
+
+    return response.data;
+  } catch (error) {
+    return error;
+  }
 }
 
-function makeConfigs(host, path, method, dataLength) {
+function makeConfigs(host, path, method) {
   const requestConfigs = {
-    host, 
+    host,
     path,
     method,
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': dataLength,
-    },
   };
 
-  return requestConfigs
+  return requestConfigs;
 }
 
 module.exports = {
