@@ -32,7 +32,7 @@ async function update(data, requestConfigs) {
   try {
     const formattedData = {
       user_id: data.userId,
-      user_attributes: data.userAtttributes,
+      user_attributes: data.userAttributes,
       user_created: getTimeStamp(),
     };
 
