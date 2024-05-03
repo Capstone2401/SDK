@@ -3,8 +3,9 @@
 const axios = require("axios");
 const processEvent = require("./process-event");
 const processUser = require("./process-user");
+const getTimeStamp = require("./get-timestamp");
 
-async function httpsSend(category, data, requestConfigs) {
+async function put(category, data, requestConfigs) {
   try {
     let formatted;
     if (category === "event") {
@@ -15,31 +16,49 @@ async function httpsSend(category, data, requestConfigs) {
       throw new Error("Invalid category specified");
     }
 
-    // TODO
-    // Currently, we are sending data that only kinesis can parse
-    // Lambda requires different format
-    const response = await post(
+    const response = await axios.post(
       `https://${requestConfigs.host}${requestConfigs.path}`,
       formatted,
     );
 
     return response.data;
   } catch (error) {
+    console.error(error);
     return error;
   }
 }
 
-function makeConfigs(host, path, method) {
+async function update(data, requestConfigs) {
+  try {
+    const formattedData = {
+      user_id: data.userId,
+      user_attributes: data.userAtttributes,
+      user_created: getTimeStamp(),
+    };
+
+    const response = await axios.post(
+      `https://${requestConfigs.host}${requestConfigs.path}`,
+      formattedData,
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+}
+
+function makeConfigs(host, path) {
   const requestConfigs = {
     host,
     path,
-    method,
   };
 
   return requestConfigs;
 }
 
 module.exports = {
-  httpsSend,
+  put,
+  update,
   makeConfigs,
 };

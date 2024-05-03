@@ -1,7 +1,7 @@
 "use strict";
 
 const { URL } = require("url");
-const { httpsSend, makeConfigs } = require("../utils/send");
+const { put, update, makeConfigs } = require("../utils/send");
 
 const DEFAULT_CONFIG = {
   test: false,
@@ -15,7 +15,7 @@ async function sendEvent(host, path, eventName, userId, eventAttributes) {
     eventAttributes,
   };
 
-  const response = await httpsSend(
+  const response = await put(
     "event",
     eventData,
     makeConfigs(host, path, "POST", eventData),
@@ -26,15 +26,16 @@ async function sendEvent(host, path, eventName, userId, eventAttributes) {
 
 async function makeUser(host, path, userId, userAttributes) {
   const userData = {
-    userId: userId,
+    userId,
     userAttributes,
   };
 
-  const response = await httpsSend(
+  const response = await put(
     "user",
     userData,
-    makeConfigs(host, path, "POST", userData),
+    makeConfigs(host, path, userData),
   );
+
   return response;
 }
 
@@ -44,18 +45,11 @@ async function updateUser(host, path, userId, userAttributes) {
     userAttributes,
   };
 
-  const response = await httpsSend(
-    "user",
-    userData,
-    makeConfigs(host, path, "PATCH"),
-  );
-
+  const response = await update(userData, makeConfigs(host, path));
   return response;
 }
 
 function init(gatewayUrl, developerConfig) {
-  // TODO; error handling for if `gateway` is missing. `gateway` is required.
-
   const url = new URL(gatewayUrl);
   const host = url.hostname;
   const path = url.pathname;
@@ -66,7 +60,7 @@ function init(gatewayUrl, developerConfig) {
 
   loafInstance.sendEvent = sendEvent.bind(null, host, `${path}/events`);
   loafInstance.makeUser = makeUser.bind(null, host, `${path}/users`);
-  loafInstance.updateUser = updateUser.bind(null, host, `${path}/users`);
+  loafInstance.updateUser = updateUser.bind(null, host, `${path}/update_users`);
   return loafInstance;
 }
 
