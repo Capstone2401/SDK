@@ -38,7 +38,7 @@ async function update(data, requestConfigs) {
 
     const response = await axios.post(
       `https://${requestConfigs.host}${requestConfigs.path}`,
-      formattedData,
+      JSON.stringify(formattedData),
     );
 
     return response.data;
