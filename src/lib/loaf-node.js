@@ -1,7 +1,7 @@
 "use strict";
 
-const { URL } = require("url");
-const { put, update, makeConfigs } = require("../utils/send");
+import { URL } from "url";
+import { put, update, makeConfigs } from "../utils/send.js";
 
 const DEFAULT_CONFIG = {
   test: false,
@@ -64,4 +64,4 @@ function init(gatewayUrl, developerConfig) {
   return loafInstance;
 }
 
-module.exports = { init };
+export default { init };

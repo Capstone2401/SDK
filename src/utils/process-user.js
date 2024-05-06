@@ -1,5 +1,6 @@
-const getShardKey = require("./get-shard-key.js");
-const getTimeStamp = require("./get-timestamp.js");
+import getShardKey from "./get-shard-key.js";
+import getTimeStamp from "./get-timestamp.js";
+import stringifyObject from "./process-attributes.js";
 
 const processUser = (user) => {
   if (!user.userId) {
@@ -12,11 +13,11 @@ const processUser = (user) => {
     Data: Buffer.from(
       JSON.stringify({
         user_id: user.userId,
-        user_attributes: user.userAttributes || null,
+        user_attributes: stringifyObject(user.userAttributes) || null,
         user_created: getTimeStamp(),
       }),
     ).toString("base64"),
   });
 };
 
-module.exports = processUser;
+export default processUser;

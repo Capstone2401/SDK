@@ -3,4 +3,4 @@ function getTimeStamp() {
   return now.replace("T", "").replace("Z", "");
 }
 
-module.exports = getTimeStamp;
+export default getTimeStamp;

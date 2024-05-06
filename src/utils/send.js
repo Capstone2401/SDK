@@ -1,9 +1,10 @@
 "use strict";
 
-const axios = require("axios");
-const processEvent = require("./process-event");
-const processUser = require("./process-user");
-const getTimeStamp = require("./get-timestamp");
+import axios from "axios";
+import processEvent from "./process-event.js";
+import processUser from "./process-user.js";
+import getTimeStamp from "./get-timestamp.js";
+import stringifyObject from "./process-attributes.js";
 
 async function put(category, data, requestConfigs) {
   try {
@@ -32,7 +33,7 @@ async function update(data, requestConfigs) {
   try {
     const formattedData = {
       user_id: data.userId,
-      user_attributes: data.userAttributes,
+      user_attributes: stringifyObject(data.userAttributes),
       user_created: getTimeStamp(),
     };
 
@@ -57,8 +58,4 @@ function makeConfigs(host, path) {
   return requestConfigs;
 }
 
-module.exports = {
-  put,
-  update,
-  makeConfigs,
-};
+export { put, update, makeConfigs };

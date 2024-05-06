@@ -1,5 +1,6 @@
-const getShardKey = require("./get-shard-key.js");
-const getTimeStamp = require("./get-timestamp.js");
+import getShardKey from "./get-shard-key.js";
+import getTimeStamp from "./get-timestamp.js";
+import stringifyObject from "./process-attributes.js";
 
 const processEvent = (event) => {
   if (!event.eventName || !event.userId) {
@@ -15,11 +16,11 @@ const processEvent = (event) => {
       JSON.stringify({
         event_name: event.eventName,
         user_id: event.userId || "default_user",
-        event_attributes: event.eventAttributes || null,
+        event_attributes: stringifyObject(event.eventAttributes) || null,
         event_created: getTimeStamp(),
       }),
     ).toString("base64"),
   });
 };
 
-module.exports = processEvent;
+export default processEvent;

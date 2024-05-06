@@ -1,4 +1,4 @@
-const os = require("os");
+import os from "os";
 
 function getHostIP() {
   const networkInterfaces = os.networkInterfaces();
@@ -16,4 +16,4 @@ function getHostIP() {
   }
 }
 
-module.exports = getHostIP;
+export default getHostIP;
