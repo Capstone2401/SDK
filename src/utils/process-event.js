@@ -3,10 +3,8 @@ import getTimeStamp from "./get-timestamp.js";
 import stringifyObject from "./process-attributes.js";
 
 const processEvent = (event) => {
-  if (!event.eventName || !event.userId) {
-    return new Error(
-      "An 'eventName', and 'userId' must be provided must be provided",
-    );
+  if (!event.eventName) {
+    return new Error("An 'eventName' must be provided must be provided");
   }
 
   return JSON.stringify({
