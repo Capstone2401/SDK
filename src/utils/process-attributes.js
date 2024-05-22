@@ -1,12 +1,17 @@
 function stringifyObject(obj) {
-  for (var key in obj) {
-    if (typeof obj[key] === "object") {
-      obj[key] = stringifyObject(obj[key]);
+  const newObj = {};
+  for (const key in obj) {
+    if (
+      typeof obj[key] === "number" ||
+      typeof obj[key] === "boolean" ||
+      typeof obj[key] === "string"
+    ) {
+      newObj[key] = String(obj[key]);
     } else {
-      obj[key] = String(obj[key]);
+      return new Error("attribute value must string, number, or boolean");
     }
   }
-  return obj;
+  return newObj;
 }
 
 export default stringifyObject;
