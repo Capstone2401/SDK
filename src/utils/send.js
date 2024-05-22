@@ -6,7 +6,7 @@ import processUser from "./process-user.js";
 import getTimeStamp from "./get-timestamp.js";
 import stringifyObject from "./process-attributes.js";
 
-async function put(category, data, requestConfigs) {
+async function post(category, data, requestConfigs) {
   try {
     let formatted;
     if (category === "event") {
@@ -29,7 +29,7 @@ async function put(category, data, requestConfigs) {
   }
 }
 
-async function update(data, requestConfigs) {
+async function patch(data, requestConfigs) {
   try {
     const formattedData = {
       user_id: data.userId,
@@ -58,4 +58,4 @@ function makeConfigs(host, path) {
   return requestConfigs;
 }
 
-export { put, update, makeConfigs };
+export { post, patch, makeConfigs };

@@ -1,7 +1,7 @@
 "use strict";
 
 import { URL } from "url";
-import { put, update, makeConfigs } from "../utils/send.js";
+import { post, patch, makeConfigs } from "../utils/send.js";
 
 const DEFAULT_CONFIG = {
   test: false,
@@ -15,11 +15,7 @@ async function sendEvent(host, path, eventName, userId, eventAttributes) {
     eventAttributes,
   };
 
-  const response = await put(
-    "event",
-    eventData,
-    makeConfigs(host, path, "POST", eventData),
-  );
+  const response = await post("event", eventData, makeConfigs(host, path));
 
   return response;
 }
@@ -30,12 +26,7 @@ async function makeUser(host, path, userId, userAttributes) {
     userAttributes,
   };
 
-  const response = await put(
-    "user",
-    userData,
-    makeConfigs(host, path, userData),
-  );
-
+  const response = await post("user", userData, makeConfigs(host, path));
   return response;
 }
 
@@ -45,7 +36,7 @@ async function updateUser(host, path, userId, userAttributes) {
     userAttributes,
   };
 
-  const response = await update(userData, makeConfigs(host, path));
+  const response = await patch(userData, makeConfigs(host, path));
   return response;
 }
 
