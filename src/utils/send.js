@@ -14,7 +14,7 @@ async function post(category, data, requestConfigs) {
     } else if (category === "user") {
       formatted = processUser(data);
     } else {
-      throw new Error("Invalid category specified");
+      return new Error("Invalid category specified");
     }
 
     const response = await axios.post(
