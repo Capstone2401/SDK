@@ -4,7 +4,7 @@ import stringifyObject from "./process-attributes.js";
 
 const processEvent = (event) => {
   if (!event.eventName) {
-    return new Error("An 'eventName' must be provided must be provided");
+    return new Error("An 'eventName' must be provided");
   }
 
   return JSON.stringify({

@@ -4,7 +4,7 @@ import stringifyObject from "./process-attributes.js";
 
 const processUser = (user) => {
   if (!user.userId) {
-    return new Error("A userId' must be provided must be provided");
+    return new Error("A 'userId' must be provided");
   }
 
   return JSON.stringify({
