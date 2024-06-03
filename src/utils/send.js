@@ -1,35 +1,61 @@
 "use strict";
 
-const https = require('https');
+import axios from "axios";
+import processEvent from "./process-event.js";
+import processUser from "./process-user.js";
+import getTimeStamp from "./get-timestamp.js";
+import stringifyObject from "./process-attributes.js";
 
-// `data` is a JSON-stringified object.
-function httpsSend(data, requestConfigs) {
-  const req = https.request(requestConfigs, (response) => {
-    let responseData = '';
-    response.on('data', (chunk) => responseData += chunk);
-    response.on('end', () => console.log('Response body: ', responseData));
-  });
+async function post(category, data, requestConfigs) {
+  try {
+    let formatted;
+    if (category === "event") {
+      formatted = processEvent(data);
+    } else if (category === "user") {
+      formatted = processUser(data);
+    } else {
+      return new Error("Invalid category specified");
+    }
 
-  req.on('error', (err) => console.error('Error: ', err));
-  req.write(data);
-  req.end();
+    const response = await axios.post(
+      `https://${requestConfigs.host}${requestConfigs.path}`,
+      formatted,
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
 }
 
-function makeConfigs(host, path, method, dataLength) {
+async function patch(data, requestConfigs) {
+  try {
+    const formattedData = {
+      user_id: data.userId,
+      user_attributes: stringifyObject(data.userAttributes),
+      user_created: getTimeStamp(),
+    };
+
+    const response = await axios.post(
+      `https://${requestConfigs.host}${requestConfigs.path}`,
+      JSON.stringify(formattedData),
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+}
+
+function makeConfigs(host, path) {
   const requestConfigs = {
-    host, 
+    host,
     path,
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': dataLength,
-    },
   };
 
-  return requestConfigs
+  return requestConfigs;
 }
 
-module.exports = {
-  httpsSend,
-  makeConfigs,
-};
+export { post, patch, makeConfigs };
