@@ -1,0 +1,12 @@
+{
+  "name": "@data-loaf/node-sdk",
+  "version": "1.0.3",
+  "description": "This is a nodeJS SDK that allows developers to send events to the dataloaf product analytics application",
+  "type": "module",
+  "dependencies": {
+    "axios": "^1.6.8"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
