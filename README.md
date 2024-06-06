@@ -1,13 +1,11 @@
 # Node SDK
-
-This SDK provides functions for sending events, creating users, and updating user information via HTTPS requests.
+This SDK provides functions for sending events, creating users, and updating user information via HTTPS requests for [DataLoaf](https://data-loaf.com)
 
 ## Installation
-
 To use the SDK in your project, you can install it via npm:
 
 ```bash
-npm install dataloaf
+npm install @data-loaf/node-sdk
 ```
 
 ## Usage
@@ -27,9 +25,9 @@ To start using the SDK, you need to initialize it with the gateway URL and optio
 **Example:**
 
 ```javascript
-const sdk = require("dataloaf");
+import sdk from "@data-loaf/node-sdk"
 
-const gatewayUrl = "https://example.com/api";
+const gatewayUrl = "https://aws.bvha2j3juseast1.com";
 const developerConfig = {
   test: true,
   debug: false,
@@ -42,6 +40,9 @@ const loaf = sdk.init(gatewayUrl, developerConfig);
 #### Default Configuration
 The SDK comes with default configuration options, but you can override them during initialization if needed.
 
+<details>
+<summary>config options</summary>
+
 **Example:**
 ```javascript
 const config = {
@@ -49,6 +50,7 @@ const config = {
     test: false,
 }
 ```
+</details>
 
 ### Sending Events
 
@@ -107,4 +109,3 @@ You can update user information using the `updateUser` function.
 loaf.updateUser("user456", { email: "john.doe@example.com" });
 ```
 </details>
-```
